@@ -4,8 +4,10 @@ import joblib
 import numpy as np
 import os
 from pipeline import run_pipeline
+from docs import swaggerui_blueprint, SWAGGER_URL
 
 app = Flask(__name__)
+app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 api = Api(app)
 
 MODEL_FILENAME = 'iris_model.pkl'
@@ -23,12 +25,15 @@ model = joblib.load(MODEL_FILENAME)
 scaler = joblib.load(SCALER_FILENAME)
 
 class Predict(Resource):
-    def post(self):
-        data = request.get_json(force=True)
-        sepal_length = data['sepal_length']
-        sepal_width = data['sepal_width']
-        petal_length = data['petal_length']
-        petal_width = data['petal_width']
+    def get(self):
+        # Obter parâmetros da query string
+        try:
+            sepal_length = float(request.args.get('sepal_length'))
+            sepal_width = float(request.args.get('sepal_width'))
+            petal_length = float(request.args.get('petal_length'))
+            petal_width = float(request.args.get('petal_width'))
+        except (TypeError, ValueError):
+            return {"error": "Parâmetros inválidos"}, 400
         
         # Criar array com as características da flor
         features = np.array([[sepal_length, sepal_width, petal_length, petal_width]])
@@ -40,7 +45,7 @@ class Predict(Resource):
         prediction = model.predict(features_scaled)
         
         # Retornar a previsão como resposta JSON
-        return jsonify({'species': prediction[0]})
+        return jsonify({'specie': prediction[0]})
 
 api.add_resource(Predict, '/predict')
 

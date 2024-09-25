@@ -1,0 +1,64 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Iris Prediction API",
+    "description": "API para prever a espécie da flor Iris",
+    "version": "1.0.0"
+  },
+  "schemes": ["http"],
+  "paths": {
+    "/predict": {
+      "get": {
+        "summary": "Predição da espécie Iris",
+        "description": "Retorna a espécie prevista com base nos parâmetros fornecidos",
+        "parameters": [
+          {
+            "name": "sepal_length",
+            "in": "query",
+            "required": true,
+            "type": "number",
+            "description": "Comprimento da sépala"
+          },
+          {
+            "name": "sepal_width",
+            "in": "query",
+            "required": true,
+            "type": "number",
+            "description": "Largura da sépala"
+          },
+          {
+            "name": "petal_length",
+            "in": "query",
+            "required": true,
+            "type": "number",
+            "description": "Comprimento da pétala"
+          },
+          {
+            "name": "petal_width",
+            "in": "query",
+            "required": true,
+            "type": "number",
+            "description": "Largura da pétala"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "specie": {
+                  "type": "string",
+                  "description": "Espécie prevista"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro nos parâmetros"
+          }
+        }
+      }
+    }
+  }
+}
