@@ -15,12 +15,12 @@ Este projeto implementa uma API para classificar flores do tipo Íris utilizando
 ```bash
 iris_ml_api/
 │
+├── static/              # Diretório para arquivos estáticos
+│   └── swagger.json     # Configuração da documentação da API no Swagger
 ├── app.py               # Código da API
 ├── config.py            # Configuração com o nome dos arquivos do modelo e pasta de armazenamento
 ├── Dockerfile           # Arquivo de configuração do Docker
 ├── docs.py              # Configuração do Swagger para documentação da API
-├── static/              # Diretório para arquivos estáticos
-│   └── swagger.json     # Configuração da documentação da API no Swagger
 ├── pipeline.py          # Código para treinamento do modelo
 └── requirements.txt     # Dependências do projeto
 ```
@@ -50,7 +50,7 @@ iris_ml_api/
 
 ## Reproduzir a pipeline
 
-Para reproduzir a pipeline, treinar o modelo e gerar os arquivos iris_model.pkl e iris_scaler.pkl, execute (Windows):
+Para reproduzir a pipeline, treinar o modelo e gerar os arquivos `iris_model.pkl` e `iris_scaler.pkl`, execute (Windows):
    ```bash
    docker run -it -v ${PWD}/ml:/usr/src/app/ml/ iris_api:latest pipeline.py
    ```
