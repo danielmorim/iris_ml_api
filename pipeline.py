@@ -4,6 +4,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import confusion_matrix, accuracy_score
+from config import MODEL_FILENAME, SCALER_FILENAME
 import joblib
 
 def run_pipeline():
@@ -32,8 +33,8 @@ def run_pipeline():
     print(f'Matriz Confusão: \n{cm}')
 
     # Salvar o modelo e o scaler treinados
-    joblib.dump(model, 'iris_model.pkl')
-    joblib.dump(sc, 'iris_scaler.pkl')
+    joblib.dump(model, MODEL_FILENAME)
+    joblib.dump(sc, SCALER_FILENAME)
 
 if __name__ == '__main__':
     run_pipeline()

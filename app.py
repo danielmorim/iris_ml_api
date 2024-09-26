@@ -2,16 +2,14 @@ from flask import Flask, request, jsonify
 from flask_restful import Api, Resource
 import joblib
 import numpy as np
+import pandas as pd
 import os
 from pipeline import run_pipeline
 from docs import swaggerui_blueprint, SWAGGER_URL
+from config import MODEL_FILENAME, SCALER_FILENAME
 
 app = Flask(__name__)
-app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 api = Api(app)
-
-MODEL_FILENAME = 'iris_model.pkl'
-SCALER_FILENAME = 'iris_scaler.pkl'
 
 # Verificar se os modelos já existem; se não, treinar
 if not os.path.exists(MODEL_FILENAME) or not os.path.exists(SCALER_FILENAME):
@@ -26,28 +24,34 @@ scaler = joblib.load(SCALER_FILENAME)
 
 class Predict(Resource):
     def get(self):
-        # Obter parâmetros da query string
+        # Mapeando os parâmetros da query string com seus nomes
+        params = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
+    
+        print('Verificando os dados recebidos')
         try:
-            sepal_length = float(request.args.get('sepal_length'))
-            sepal_width = float(request.args.get('sepal_width'))
-            petal_length = float(request.args.get('petal_length'))
-            petal_width = float(request.args.get('petal_width'))
+            # Extraindo os parâmetros e convertendo-os para float
+            values = [float(request.args.get(param)) for param in params]
         except (TypeError, ValueError):
             return {"error": "Parâmetros inválidos"}, 400
-        
-        # Criar array com as características da flor
-        features = np.array([[sepal_length, sepal_width, petal_length, petal_width]])
+
+        # Criar o DataFrame diretamente a partir dos valores recebidos
+        features = pd.DataFrame([values], columns=np.char.replace(np.array(params), '_', ' '))
         
         # Escalar os dados
+        print('Escalando os dados')
         features_scaled = scaler.transform(features)
         
         # Fazer a previsão
+        print('Fazendo a previsão')
         prediction = model.predict(features_scaled)
         
         # Retornar a previsão como resposta JSON
+        print('Retornando a resposta')
         return jsonify({'specie': prediction[0]})
 
 api.add_resource(Predict, '/predict')
+app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
 if __name__ == '__main__':
-    app.run()
+    print('Iniciando a API...')
+    app.run(host='0.0.0.0', port=5000)

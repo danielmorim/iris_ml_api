@@ -17,28 +17,32 @@
             "in": "query",
             "required": true,
             "type": "number",
-            "description": "Comprimento da sépala"
+            "description": "Comprimento da sépala",
+            "value": 5.5
           },
           {
             "name": "sepal_width",
             "in": "query",
             "required": true,
             "type": "number",
-            "description": "Largura da sépala"
+            "description": "Largura da sépala",
+            "value": 2.5
           },
           {
             "name": "petal_length",
             "in": "query",
             "required": true,
             "type": "number",
-            "description": "Comprimento da pétala"
+            "description": "Comprimento da pétala",
+            "value": 4.0
           },
           {
             "name": "petal_width",
             "in": "query",
             "required": true,
             "type": "number",
-            "description": "Largura da pétala"
+            "description": "Largura da pétala",
+            "value": 1.3
           }
         ],
         "responses": {
